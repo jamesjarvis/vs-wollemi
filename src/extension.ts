@@ -1,27 +1,75 @@
 // The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  var extension = new PleaseWollemiExtension(context);
+  extension.showOutputMessage();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vs-wollemi" is now active!');
+  vscode.commands.registerCommand(
+    "extension.vs-wollemi.enableOnSave",
+    () => {
+      extension.isEnabled = true;
+    }
+  );
+  vscode.commands.registerCommand(
+    "extension.vs-wollemi.disableOnSave",
+    () => {
+      extension.isEnabled = false;
+    }
+  );
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vs-wollemi.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+  vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
+    // The code you place here will be executed every time a file is saved.
+    extension.onSaveFile(document);
+  });
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vs-wollemi!');
-	});
-
-	context.subscriptions.push(disposable);
+  // context.subscriptions.push();
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
+
+interface WollemiConfig {
+  // command: string
+}
+
+class PleaseWollemiExtension {
+  private _outputChannel: vscode.OutputChannel;
+  private _context: vscode.ExtensionContext;
+  private _config: WollemiConfig;
+
+  constructor(context: vscode.ExtensionContext) {
+    this._context = context;
+    this._outputChannel = vscode.window.createOutputChannel("vs-wollemi");
+    this._config = <WollemiConfig>(
+      (<any>vscode.workspace.getConfiguration("jamesjarvis.vs-wollemi"))
+    );
+  }
+
+  public get isEnabled(): boolean {
+    return !!this._context.globalState.get("isEnabled", true);
+  }
+  public set isEnabled(value: boolean) {
+    this._context.globalState.update("isEnabled", value);
+    this.showOutputMessage();
+  }
+
+  /**
+   * Show basic message in output channel
+   */
+  public showOutputMessage(message?: string): void {
+    message =
+      message || `vs-wollemi ${this.isEnabled ? "enabled" : "disabled"}.`;
+    this._outputChannel.appendLine(message);
+  }
+
+  public onSaveFile(document: vscode.TextDocument): void {
+    if(!this.isEnabled) {
+			this.showOutputMessage();
+			return;
+		}
+
+    this._outputChannel.appendLine(
+      "Damn looks like you save a file! " + document.fileName
+    );
+  }
+}
