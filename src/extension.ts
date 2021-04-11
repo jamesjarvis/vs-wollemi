@@ -144,8 +144,8 @@ class PleaseWollemiExtension {
     this.showOutputMessage(`*** cmd '${cmd}' start.`);
 
     var child = exec(cmd, this._getExecOption(doc));
-    child.stdout.on("data", (data) => this._outputChannel.append(data));
-    child.stderr.on("data", (data) => this._outputChannel.append(data));
+    child.stdout!.on("data", (data) => this._outputChannel.append(data));
+    child.stderr!.on("data", (data) => this._outputChannel.append(data));
     child.on("error", (e) => {
       this.showOutputMessage(e.message);
     });
