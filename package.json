@@ -15,14 +15,40 @@
     "main": "./out/extension.js",
     "contributes": {
         "commands": [{
-                "command": "extension.vs-wollemi.enableOnSave",
+                "command": "vs-wollemi.enableOnSave",
                 "title": "Run Wollemi On Save: Enable"
             },
             {
-                "command": "extension.vs-wollemi.disableOnSave",
+                "command": "vs-wollemi.disableOnSave",
                 "title": "Run Wollemi On Save: Disable"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "VS Wollemi command configuration.",
+            "type": "object",
+            "properties": {
+                "vs-wollemi.autoClearConsole": {
+                    "type": "boolean",
+                    "scope": "resource",
+                    "default": true,
+                    "description": "Automatically clear the console on each save before running commands."
+                },
+                "vs-wollemi.runOnSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Run vs-wollemi on file save."
+                },
+                "vs-wollemi.shell": {
+                    "type": "string",
+                    "description": "Shell to execute the command with (gets passed to child_process.exec as an options arg. e.g. child_process(cmd, { shell })."
+                },
+                "vs-wollemi.wollemiCommand": {
+                    "type": "string",
+                    "description": "Command that triggers wollemi (default: 'wollemi', but another example may be 'plz update-go-targets'",
+                    "default": "wollemi"
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
