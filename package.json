@@ -4,6 +4,10 @@
     "description": "Easy vscode support for Wollemi Please autogeneration.",
     "version": "0.0.1",
     "publisher": "jamesjarvis",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jamesjarvis/vs-wollemi"
+    },
     "engines": {
         "vscode": "^1.55.0"
     },
