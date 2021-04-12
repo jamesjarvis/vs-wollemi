@@ -1,5 +1,7 @@
 # VS-Wollemi
 
+[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/version-short/jamesjarvis.vs-wollemi.svg)](https://marketplace.visualstudio.com/items?itemName=jamesjarvis.vs-wollemi)
+
 This is a simple VSCode wrapper around [Wollemi](https://github.com/tcncloud/wollemi) that runs wollemi each time a `go` or `plz BUILD` file is saved.
 
 ## Features
